@@ -3,83 +3,150 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>pnetv veículos - Busca de Peças</title>
+    <title>pnetv veículos - Banco de Peças</title>
     <style>
-        :root { --primary: #ff9800; --bg: #121212; --card: #1e1e1e; --text: #e0e0e0; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 20px; }
-        .container { max-width: 900px; margin: auto; }
-        h1 { color: var(--primary); text-align: center; }
-        .search-box { width: 100%; padding: 15px; border-radius: 10px; border: 1px solid #444; background: #252525; color: white; font-size: 18px; margin-bottom: 20px; box-sizing: border-box; }
-        .disclaimer { background: #330000; border: 1px solid #ff4444; padding: 15px; border-radius: 8px; font-size: 14px; margin-bottom: 20px; }
-        table { width: 100%; border-collapse: collapse; background: var(--card); border-radius: 8px; overflow: hidden; }
-        th, td { padding: 15px; text-align: left; border-bottom: 1px solid #333; }
-        th { background: #2a2a2a; color: var(--primary); text-transform: uppercase; font-size: 12px; }
-        tr:hover { background: #252525; }
-        @media (max-width: 600px) { th, td { padding: 10px; font-size: 14px; } }
+        :root { --primary: #ff9800; --bg: #0f0f0f; --card: #1a1a1a; --text: #f0f0f0; }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 10px; }
+        .container { max-width: 1000px; margin: auto; }
+        
+        /* Cabeçalho */
+        h1 { color: var(--primary); text-align: center; margin-bottom: 5px; }
+        p.subtitle { text-align: center; color: #888; margin-bottom: 20px; font-size: 0.9em; }
+
+        /* Controles */
+        .search-box { width: 100%; padding: 15px; border-radius: 8px; border: 1px solid #333; background: #222; color: white; font-size: 16px; margin-bottom: 15px; box-sizing: border-box;}
+        .filter-group { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 15px; justify-content: center; }
+        .filter-btn { padding: 6px 12px; border-radius: 15px; border: 1px solid #444; background: #222; color: #aaa; cursor: pointer; font-size: 13px; transition: 0.2s; }
+        .filter-btn.active { background: var(--primary); color: #000; border-color: var(--primary); font-weight: bold; }
+
+        /* Tabela */
+        .table-wrapper { overflow-x: auto; border-radius: 8px; border: 1px solid #333; max-height: 70vh; overflow-y: auto; }
+        table { width: 100%; border-collapse: collapse; background: var(--card); min-width: 600px; }
+        
+        /* Cabeçalho fixo (Sticky Header) */
+        thead th { position: sticky; top: 0; background: #252525; z-index: 10; padding: 12px; text-align: left; color: var(--primary); font-size: 12px; text-transform: uppercase; box-shadow: 0 2px 5px rgba(0,0,0,0.5); }
+        
+        td { padding: 12px; text-align: left; border-bottom: 1px solid #2a2a2a; font-size: 14px; }
+        .tag { font-size: 9px; padding: 2px 6px; border-radius: 4px; background: #333; color: #bbb; display: inline-block; margin-right: 5px; margin-bottom: 3px; }
+        
+        /* Botões de Ação */
+        .btn-acao { text-decoration: none; padding: 4px 8px; border-radius: 4px; font-size: 12px; margin-left: 5px; cursor: pointer; border: none; display: inline-flex; align-items: center; gap: 4px; }
+        .btn-foto { background: #0d47a1; color: white; }
+        .btn-zap { background: #128C7E; color: white; }
+        .code-text { font-family: monospace; font-size: 1.1em; color: #fff; }
+
+        /* Aviso */
+        .disclaimer { background: #2c0b0b; border-left: 4px solid red; padding: 10px; border-radius: 4px; font-size: 12px; margin-bottom: 15px; color: #ffcccc; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <h1>🚗 pnetv veículos</h1>
+    <p class="subtitle">Intercambiabilidade Inteligente.</p>
     
     <div class="disclaimer">
-        <strong>⚠️ ATENÇÃO:</strong> Site informativo. Verifique o código OEM com seu mecânico. O uso é por sua conta e risco.
+        ⚠️ <strong>Atenção:</strong> Sempre valide o código visualmente antes da compra.
     </div>
 
-    <input type="text" id="inputBusca" class="search-box" placeholder="Busque por carro ou código (ex: Camaro ou 12611424)..." onkeyup="buscar()">
+    <input type="text" id="inputBusca" class="search-box" placeholder="🔎 Digite peça, código ou carro..." onkeyup="renderizarTabela()">
 
-    <table id="tabelaPecas">
-        <thead>
-            <tr>
-                <th>Peça</th>
-                <th>Código OEM</th>
-                <th>Carro Premium</th>
-                <th>Carro Doador</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>Bobina de Ignição</td>
-                <td>12611424</td>
-                <td>Camaro 6.2 V8</td>
-                <td>Onix / Prisma / Cobalt</td>
-            </tr>
-            <tr>
-                <td>Sensor MAF</td>
-                <td>15865791</td>
-                <td>Camaro V6</td>
-                <td>S10 / Captiva / Malibu</td>
-            </tr>
-            <tr>
-                <td>Filtro de Óleo</td>
-                <td>12605566</td>
-                <td>Camaro SS</td>
-                <td>Cruze / Trailblazer V6</td>
-            </tr>
-            <tr>
-                <td>Sensor de Temperatura</td>
-                <td>06A919501A</td>
-                <td>Audi A3 / Golf GTI</td>
-                <td>Gol G5 / Fox</td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="filter-group" id="botoesFiltro">
+        </div>
+
+    <div class="table-wrapper">
+        <table id="tabelaPecas">
+            <thead>
+                <tr>
+                    <th>Peça</th>
+                    <th>Código OEM / Ações</th>
+                    <th>Vem no (Premium)</th>
+                    <th>Serve no (Popular)</th>
+                </tr>
+            </thead>
+            <tbody>
+                </tbody>
+        </table>
+    </div>
 </div>
 
 <script>
-function buscar() {
-    let input = document.getElementById('inputBusca').value.toLowerCase();
-    let tabela = document.getElementById('tabelaPecas');
-    let linhas = tabela.getElementsByTagName('tr');
+    // --- SEU "BANCO DE DADOS" FICA AQUI ---
+    // Quando você me mandar o texto, eu preencho essa lista pra você.
+    const bancoDePecas = [
+        { cat: "Motor", nome: "Bobina de Ignição", codigo: "12611424", premium: "Camaro 6.2 V8", popular: "Onix / Prisma" },
+        { cat: "Motor", nome: "Sensor MAF", codigo: "15865791", premium: "Camaro V6", popular: "S10 / Captiva" },
+        { cat: "Motor", nome: "Filtro de Óleo", codigo: "12605566", premium: "Camaro SS", popular: "Cruze / Malibu" },
+        { cat: "Elétrica", nome: "Sensor de Ré", codigo: "89341-33160", premium: "Hilux / SW4", popular: "Corolla 2010" },
+        { cat: "Injeção", nome: "Bico Injetor", codigo: "0280156086", premium: "Volvo C30", popular: "Ford Ka / Focus" },
+        { cat: "Suspensão", nome: "Bieleta Diant.", codigo: "1K0411315K", premium: "Audi A3 / Q3", popular: "Jetta / Fusca" }
+    ];
 
-    for (let i = 1; i < linhas.length; i++) {
-        let texto = linhas[i].innerText.toLowerCase();
-        linhas[i].style.display = texto.includes(input) ? "" : "none";
+    let categoriaAtual = 'Todas';
+
+    // 1. Gera os botões de filtro automaticamente baseados nas categorias que existem
+    function gerarFiltros() {
+        // Pega categorias únicas
+        const categorias = ['Todas', ...new Set(bancoDePecas.map(item => item.cat))];
+        const container = document.getElementById('botoesFiltro');
+        
+        container.innerHTML = categorias.map(cat => 
+            `<button class="filter-btn ${cat === 'Todas' ? 'active' : ''}" onclick="mudarFiltro('${cat}', this)">${cat}</button>`
+        ).join('');
     }
-}
+
+    // 2. Controla o filtro
+    function mudarFiltro(cat, btn) {
+        categoriaAtual = cat;
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderizarTabela();
+    }
+
+    // 3. Renderiza a tabela (Onde a mágica acontece)
+    function renderizarTabela() {
+        const busca = document.getElementById('inputBusca').value.toLowerCase();
+        const tbody = document.querySelector('#tabelaPecas tbody');
+        
+        // Filtra os dados
+        const dadosFiltrados = bancoDePecas.filter(item => {
+            const textoItem = (item.nome + item.codigo + item.premium + item.popular).toLowerCase();
+            const bateBusca = textoItem.includes(busca);
+            const bateCategoria = categoriaAtual === 'Todas' || item.cat === categoriaAtual;
+            return bateBusca && bateCategoria;
+        });
+
+        // Cria o HTML
+        tbody.innerHTML = dadosFiltrados.map(item => `
+            <tr>
+                <td><span class="tag">${item.cat}</span><br><strong>${item.nome}</strong></td>
+                <td>
+                    <span class="code-text">${item.codigo}</span>
+                    <div style="margin-top:5px;">
+                        <a href="https://www.google.com/search?tbm=isch&q=peca+oem+${item.codigo}" target="_blank" class="btn-acao btn-foto">
+                            📷 Ver Foto
+                        </a>
+                        <a href="https://wa.me/?text=Estou%20procurando%20a%20pe%C3%A7a%20${item.nome}%20c%C3%B3digo%20${item.codigo}%20do%20${item.popular}" target="_blank" class="btn-acao btn-zap">
+                            💬 Zap
+                        </a>
+                    </div>
+                </td>
+                <td>${item.premium}</td>
+                <td>${item.popular}</td>
+            </tr>
+        `).join('');
+
+        if(dadosFiltrados.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:20px;">Nenhuma peça encontrada.</td></tr>';
+        }
+    }
+
+    // Inicia tudo ao carregar
+    window.onload = () => {
+        gerarFiltros();
+        renderizarTabela();
+    };
 </script>
 
 </body>
 </html>
-
