@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>pnetv veículos - Busca de Peças</title>
+    <style>
+        :root { --primary: #ff9800; --bg: #121212; --card: #1e1e1e; --text: #e0e0e0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 20px; }
+        .container { max-width: 900px; margin: auto; }
+        h1 { color: var(--primary); text-align: center; }
+        .search-box { width: 100%; padding: 15px; border-radius: 10px; border: 1px solid #444; background: #252525; color: white; font-size: 18px; margin-bottom: 20px; box-sizing: border-box; }
+        .disclaimer { background: #330000; border: 1px solid #ff4444; padding: 15px; border-radius: 8px; font-size: 14px; margin-bottom: 20px; }
+        table { width: 100%; border-collapse: collapse; background: var(--card); border-radius: 8px; overflow: hidden; }
+        th, td { padding: 15px; text-align: left; border-bottom: 1px solid #333; }
+        th { background: #2a2a2a; color: var(--primary); text-transform: uppercase; font-size: 12px; }
+        tr:hover { background: #252525; }
+        @media (max-width: 600px) { th, td { padding: 10px; font-size: 14px; } }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🚗 pnetv veículos</h1>
+    
+    <div class="disclaimer">
+        <strong>⚠️ ATENÇÃO:</strong> Site informativo. Verifique o código OEM com seu mecânico. O uso é por sua conta e risco.
+    </div>
+
+    <input type="text" id="inputBusca" class="search-box" placeholder="Busque por carro ou código (ex: Camaro ou 12611424)..." onkeyup="buscar()">
+
+    <table id="tabelaPecas">
+        <thead>
+            <tr>
+                <th>Peça</th>
+                <th>Código OEM</th>
+                <th>Carro Premium</th>
+                <th>Carro Doador</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Bobina de Ignição</td>
+                <td>12611424</td>
+                <td>Camaro 6.2 V8</td>
+                <td>Onix / Prisma / Cobalt</td>
+            </tr>
+            <tr>
+                <td>Sensor MAF</td>
+                <td>15865791</td>
+                <td>Camaro V6</td>
+                <td>S10 / Captiva / Malibu</td>
+            </tr>
+            <tr>
+                <td>Filtro de Óleo</td>
+                <td>12605566</td>
+                <td>Camaro SS</td>
+                <td>Cruze / Trailblazer V6</td>
+            </tr>
+            <tr>
+                <td>Sensor de Temperatura</td>
+                <td>06A919501A</td>
+                <td>Audi A3 / Golf GTI</td>
+                <td>Gol G5 / Fox</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<script>
+function buscar() {
+    let input = document.getElementById('inputBusca').value.toLowerCase();
+    let tabela = document.getElementById('tabelaPecas');
+    let linhas = tabela.getElementsByTagName('tr');
+
+    for (let i = 1; i < linhas.length; i++) {
+        let texto = linhas[i].innerText.toLowerCase();
+        linhas[i].style.display = texto.includes(input) ? "" : "none";
+    }
+}
+</script>
+
+</body>
+</html>
+
